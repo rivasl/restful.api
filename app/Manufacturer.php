@@ -9,8 +9,11 @@ class Manufacturer extends Model
     protected $table = "manufacturers";
     protected $fillable = array('name', 'website');
 
+    // Oculta estos campos en el json
+    protected $hidden=['created_at', 'updated_at'];
+
     public function vehicles()
     {
-        $this->hasMany('\App\Vehicle');
+        return $this->hasMany('\App\Vehicle');
     }
 }

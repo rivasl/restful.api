@@ -11,6 +11,6 @@ class Vehicle extends Model
 
     public function manufacturer()
     {
-        $this->belongsTo('\App\Manufacturer');
+        return $this->belongsTo('\App\Manufacturer');
     }
 }

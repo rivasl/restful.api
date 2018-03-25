@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class VehicleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth.basic', ['only' =>'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,6 +21,7 @@ class VehicleController extends Controller
     public function index($manufacturer_id)
     {
         $manufacturer = Manufacturer::find($manufacturer_id);
+
         $vehicles = $manufacturer->vehicles;
 
         if ($vehicles)

@@ -9,7 +9,7 @@ class ManufacturerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth.basic', ['only' =>'show']);
+        $this->middleware('auth.basic', ['only' => 'show']);
     }
 
     /**
@@ -43,7 +43,13 @@ class ManufacturerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (!$request->get('name') || !$request->get('website'))
+            return response()->json(['msg' => 'Datos incompletos'], 404);
+        else
+        {
+            $manufacturer = Manufacturer::create($request->all());
+            return response()->json(['data' => $manufacturer, 'msg'=>'Manufacturer created'], 202);
+        }
     }
 
     /**
@@ -59,7 +65,7 @@ class ManufacturerController extends Controller
         if ($manufacturer)
             return response()->json(['data' => $manufacturer], 202);
         else
-            return response()->json(['msg' => 'Manufacturer '.$id.' not found'], 404);
+            return response()->json(['msg' => 'Manufacturer ' . $id . ' not found'], 404);
     }
 
     /**

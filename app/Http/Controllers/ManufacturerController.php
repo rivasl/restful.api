@@ -9,7 +9,7 @@ class ManufacturerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth.basic', ['only' => 'show']);
+        $this->middleware('auth.basic', ['only' => 'store']);
     }
 
     /**
@@ -44,7 +44,7 @@ class ManufacturerController extends Controller
     public function store(Request $request)
     {
         if (!$request->get('name') || !$request->get('website'))
-            return response()->json(['msg' => 'Datos incompletos'], 404);
+            return response()->json(['msg' => 'Datos incompletos'], 422);
         else
         {
             $manufacturer = Manufacturer::create($request->all());

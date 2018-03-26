@@ -10,7 +10,7 @@ class VehicleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth.basic', ['only' =>'show']);
+        $this->middleware('auth.basic', ['only' => 'store']);
     }
 
     /**
@@ -48,7 +48,17 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (!$request->get('model') || !$request->get('color') || !$request->get('manufacturer_id'))
+            return response()->json(['msg' => 'Datos incompletos'], 422);
+        else {
+            $manufacturer = Manufacturer::find($request->get('manufacturer_id'));
+            if (!$manufacturer)
+                return response()->json(['msg' => 'Manufacturer is not exist.'], 404);
+            else {
+                Vehicle::create($request->all());
+                return response()->json(['mgs' => 'Vehicle of manufacturer ' . $request->get('manufacturer_id') . ' it was created']);
+            }
+        }
     }
 
     /**

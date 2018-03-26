@@ -46,16 +46,17 @@ class VehicleController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $manufacturer_id)
     {
-        if (!$request->get('model') || !$request->get('color') || !$request->get('manufacturer_id'))
+        if (!$request->get('model') || !$request->get('color'))
             return response()->json(['msg' => 'Datos incompletos'], 422);
         else {
-            $manufacturer = Manufacturer::find($request->get('manufacturer_id'));
+            $manufacturer = Manufacturer::find($manufacturer_id);
             if (!$manufacturer)
                 return response()->json(['msg' => 'Manufacturer is not exist.'], 404);
             else {
-                Vehicle::create($request->all());
+                /*Vehicle::create($request->all());*/
+                Vehicle::create(['manufacturer_id' => $manufacturer_id, 'model' => $request->get('model'), 'color' => $request->get('color')]);
                 return response()->json(['mgs' => 'Vehicle of manufacturer ' . $request->get('manufacturer_id') . ' it was created']);
             }
         }

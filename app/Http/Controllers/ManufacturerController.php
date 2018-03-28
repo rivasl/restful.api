@@ -91,37 +91,37 @@ class ManufacturerController extends Controller
         $manufacturer = Manufacturer::find($id);
 
         if ($manufacturer) {
-
-            $name = $request->get('name');
-            $website = $request->get('website');
-
-            /* Method PATCH */
-            if ($method === 'PATCH') {
-                /* Update name */
-                if ($name != null && $name != '') {
-                    $manufacturer->name = $name;
-                }
-
-                /* Update website */
-                if ($website != null && $website != '') {
-                    $manufacturer->website = $website;
-                }
-
-                $manufacturer->save();
-                return response()->json(['msg' => 'Manufacturer \'s record ' . $id . ' edit with PATCH'], 200);
-            }
-
-            /* Method PUT */
-            if (!$name || !$website) {
-                return response()->json(['msg' => 'Data not completed'], 422);
-            } else {
-                $manufacturer->name = $name;
-                $manufacturer->website = $website;
-                $manufacturer->save();
-                return response()->json(['msg' => 'Manufacturer \'s record ' . $id . ' edit with PUT'], 200);
-            }
-        } else
             return response()->json(['msg' => 'Manufacturer ' . $id . ' not found'], 404);
+        }
+
+        $name = $request->get('name');
+        $website = $request->get('website');
+
+        /* Method PATCH */
+        if ($method === 'PATCH') {
+            /* Update name */
+            if ($name != null && $name != '') {
+                $manufacturer->name = $name;
+            }
+
+            /* Update website */
+            if ($website != null && $website != '') {
+                $manufacturer->website = $website;
+            }
+
+            $manufacturer->save();
+            return response()->json(['msg' => 'Manufacturer \'s record ' . $id . ' edit with PATCH'], 200);
+        }
+
+        /* Method PUT */
+        if (!$name || !$website) {
+            return response()->json(['msg' => 'Data not completed'], 422);
+        } else {
+            $manufacturer->name = $name;
+            $manufacturer->website = $website;
+            $manufacturer->save();
+            return response()->json(['msg' => 'Manufacturer \'s record ' . $id . ' edit with PUT'], 200);
+        }
     }
 
     /**

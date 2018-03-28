@@ -102,7 +102,6 @@ class VehicleController extends Controller
     public function update(Request $request, $manufacturer_id, $vehicle_id)
     {
         $manufacturer = Manufacturer::find($manufacturer_id);
-
         if (!$manufacturer) {
             return response()->json(['msg' => 'Manufacturer ' . $manufacturer_id . ' not found'], 404);
         }
@@ -162,8 +161,22 @@ class VehicleController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($manufacturer_id, $vehicle_id)
     {
-        //
+        $manufacturer = Manufacturer::find($manufacturer_id);
+        if (!$manufacturer) {
+            return response()->json(['msg' => 'Manufacturer ' . $manufacturer_id . ' not found'], 404);
+        }
+
+        $vehicle = Vehicle::find($vehicle_id);
+        if (!$vehicle) {
+            return response()->json(['msg' => 'Vehicle ' . $vehicle_id . ' of manufacturer ' .
+                $manufacturer_id . ' not found'], 404);
+        }
+
+        /* Method DELETE */
+        $vehicle->delete();
+        return response()->json(['msg' => 'Vehicle ' . $vehicle_id . ' of manufacturer ' . $manufacturer_id .
+            ' eliminated'], 200);
     }
 }

@@ -25,7 +25,7 @@ class VehicleController extends Controller
         $vehicles = $manufacturer->vehicles;
 
         if ($vehicles)
-            return response()->json(['data' => $vehicles], 202);
+            return response()->json(['data' => $vehicles], 200);
         else
             return response()->json(['msg' => 'Manufacturer without vehicles'], 404);
     }
@@ -57,7 +57,7 @@ class VehicleController extends Controller
             else {
                 /*Vehicle::create($request->all());*/
                 Vehicle::create(['manufacturer_id' => $manufacturer_id, 'model' => $request->get('model'), 'color' => $request->get('color')]);
-                return response()->json(['mgs' => 'Vehicle of manufacturer ' . $request->get('manufacturer_id') . ' it was created']);
+                return response()->json(['mgs' => 'Vehicle of manufacturer ' . $request->get('manufacturer_id') . ' it was created'], 201);
             }
         }
     }
@@ -76,7 +76,7 @@ class VehicleController extends Controller
             ->get();
 
         if ($vehicle)
-            return response()->json(['data' => $vehicle], 202);
+            return response()->json(['data' => $vehicle], 200);
         else
             return response()->json(['msg' => 'Manufacturer without vehicles'], 404);
     }
@@ -90,7 +90,6 @@ class VehicleController extends Controller
     public function edit($manufacturer_id, $vehicle_id)
     {
         return "Editando el vehiculo $vehicle_id del fabricante $manufacturer_id";
-
     }
 
     /**
@@ -100,9 +99,61 @@ class VehicleController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $manufacturer_id, $vehicle_id)
     {
-        //
+        $manufacturer = Manufacturer::find($manufacturer_id);
+
+        if (!$manufacturer) {
+            return response()->json(['msg' => 'Manufacturer ' . $manufacturer_id . ' not found'], 404);
+        }
+
+        $vehicle = Vehicle::find($vehicle_id);
+        if (!$vehicle) {
+            return response()->json(['msg' => 'Vehicle ' . $vehicle_id . ' of manufacturer ' .
+                $manufacturer_id . ' not found'], 404);
+        }
+
+        $model = $request->get('model');
+        $color = $request->get('color');
+        $method = $request->method();
+
+        /* Method PATCH */
+        if ($method === 'PATCH') {
+
+            $edited = false;
+
+            /* Update model */
+            if ($model != null && $model != '') {
+                $vehicle->model = $model;
+                $edited = true;
+            }
+
+            /* Update color */
+            if ($color != null && $color != '') {
+                $vehicle->color = $color;
+                $edited = true;
+            }
+
+            if ($edited) {
+                $vehicle->save();
+                return response()->json(['msg' => 'Vehicle ' . $vehicle_id . ' of manufacturer ' . $manufacturer_id .
+                    ' edited with PATCH'], 200);
+            }
+            else{
+                return response()->json(['msg' =>'There wasn\'t changes']);
+            }
+        }
+
+        /* Method PUT */
+        if (!$model || !$color) {
+            return response()->json(['msg' => 'Data not completed'], 422);
+        } else {
+            $vehicle->model = $model;
+            $vehicle->color = $color;
+            $vehicle->save();
+            return response()->json(['msg' => 'Vehicle ' . $vehicle_id . ' of manufacturer ' . $manufacturer_id .
+                ' edited with PUT'], 200);
+        }
     }
 
     /**

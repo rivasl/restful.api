@@ -32,7 +32,7 @@ class ManufacturerController extends Controller
      */
     public function create()
     {
-        return "Creando el fabricante";
+        return "Creando el fabricante";     // TODO: No se incluye en la API
     }
 
     /**
@@ -75,7 +75,7 @@ class ManufacturerController extends Controller
      */
     public function edit($id)
     {
-        return "Editando el fabricante con id $id";
+        return "Editando el fabricante con id $id";  // TODO: No se incluye en la API
     }
 
     /**

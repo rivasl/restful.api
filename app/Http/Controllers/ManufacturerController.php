@@ -19,9 +19,6 @@ class ManufacturerController extends Controller
      */
     public function index()
     {
-//  1     return Manufacturer::all();
-//  2     return response()->json(Manufacturer::all());
-//  3     return response()->json(['data' => Manufacturer::all()]);
         return response()->json(['data' => Manufacturer::all()], 200);
     }
 

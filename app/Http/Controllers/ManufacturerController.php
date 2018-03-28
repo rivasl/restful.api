@@ -89,8 +89,7 @@ class ManufacturerController extends Controller
     {
         $method = $request->method();
         $manufacturer = Manufacturer::find($id);
-
-        if ($manufacturer) {
+        if (!$manufacturer) {
             return response()->json(['msg' => 'Manufacturer ' . $id . ' not found'], 404);
         }
 
@@ -132,6 +131,17 @@ class ManufacturerController extends Controller
      */
     public function destroy($id)
     {
-        return "Eliminando el fabricante con id $id";
+        $manufacturer = Manufacturer::find($id);
+        if (!$manufacturer) {
+            return response()->json(['msg' => 'Manufacturer ' . $id . ' not found'], 404);
+        }
+
+        $vehicles = $manufacturer->vehicles;
+        if (sizeof($vehicles) > 0) {
+            return response()->json(['msg' => 'The manufacturer can not be eliminated because it has associated vehicles. Eliminate the vehicles first'], 200);
+        }
+
+        $manufacturer->delete();
+        return response()->json(['msg' => 'Manufacturer ' . $id . ' eliminated'], 200);
     }
 }

@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vehicle extends Model
 {
-    protected $table="vehicles";
-    protected $fillable = array('color', 'model','manufacturer_id');
+    protected $table = "vehicles";
+    protected $fillable = array('color', 'model', 'manufacturer_id');
 
     public function manufacturer()
     {
